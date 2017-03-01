@@ -172,6 +172,53 @@ namespace Library
             }
         }
 
+        public void AddCopy(int copyId)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current, due_date) VALUES (@BookId, @CopyId, @Current, @DueDate);", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+            cmd.Parameters.Add(new SqlParameter("@CopyId", copyId.ToString()));
+            cmd.Parameters.Add(new SqlParameter("@Current", "1"));
+            cmd.Parameters.Add(new SqlParameter("@DueDate", "2016-03-01"));
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+        }
+
+        public List<Copy> GetCopy()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT copy.* FROM patron JOIN checkout ON (copy.id = checkout.copy_id) JOIN patron ON (checkout.patron_id = patron.id) WHERE patron.id = @PatronId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Copy> allCopys = new List<Copy> {};
+
+            while(rdr.Read())
+            {
+                int copyId = rdr.GetInt32(0);
+                int copyBookId = rdr.GetInt32(1);
+                int copyCopyNumber = rdr.GetInt32(2);
+                Copy newCopy = new Copy(copyBookId, copyCopyNumber, copyId);
+                allCopys.Add(newCopy);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return allCopys;
+        }
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("patron");
