@@ -238,6 +238,8 @@ namespace Library
             DB.CloseSqlConnection(rdr, conn);
         }
 
+
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("book");

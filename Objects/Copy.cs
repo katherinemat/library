@@ -9,11 +9,13 @@ namespace Library
         private int _bookId;
         private int _copyNumber;
         private int _id;
+        private int _available;
 
         public Copy(int bookId, int copyNumber, int id = 0)
         {
             _bookId = bookId;
             _copyNumber = copyNumber;
+            _available = 1;
             _id = id;
         }
 
@@ -29,7 +31,8 @@ namespace Library
                 bool idEquality = this.GetId() == newCopy.GetId();
                 bool bookIdEquality = this.GetBookId() == newCopy.GetBookId();
                 bool copyNumberEquality = this.GetCopyNumber() == newCopy.GetCopyNumber();
-                return (idEquality && bookIdEquality && copyNumberEquality);
+                bool availableEquality = this.GetAvailable() == newCopy.GetAvailable();
+                return (idEquality && bookIdEquality && copyNumberEquality && availableEquality);
             }
         }
 
@@ -58,6 +61,15 @@ namespace Library
         public void SetCopyNumber(int newCopyNumber)
         {
             _copyNumber = newCopyNumber;
+        }
+
+        public int GetAvailable()
+        {
+            return _available;
+        }
+        public void SetAvailable(int newAvailable)
+        {
+            _available = newAvailable;
         }
 
         public static List<Copy> GetAll()

@@ -177,7 +177,7 @@ namespace Library
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current, due_date) VALUES (@BookId, @CopyId, @Current, @DueDate);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current, due_date) VALUES (@BookId, @CopyId, @Current, @DueDate); UPDATE copy SET available = @Available WHERE copy_id = @CopyId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
             cmd.Parameters.Add(new SqlParameter("@CopyId", copyId.ToString()));
