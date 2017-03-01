@@ -172,6 +172,50 @@ namespace Library
             }
         }
 
+        public void AddAuthor(int authorId)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO books_authors (book_id, author_id) VALUES (@BookId, @AuthorId);", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@BookId", this.GetId().ToString()));
+            cmd.Parameters.Add(new SqlParameter("@AuthorId", authorId.ToString()));
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+        }
+
+        public List<Author> GetAuthor()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT author.* FROM book JOIN books_authors ON (book.id = books_authors.book_id) JOIN author ON (books_authors.author_id = author.id) WHERE book.id = @BookId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@BookId", this.GetId().ToString()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Author> allAuthors = new List<Author> {};
+
+            while(rdr.Read())
+            {
+                int authorId = rdr.GetInt32(0);
+                string authorName = rdr.GetString(1);
+                Author newAuthor = new Author(authorName, authorId);
+                allAuthors.Add(newAuthor);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return allAuthors;
+        }
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("book");

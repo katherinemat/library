@@ -92,7 +92,7 @@ namespace Library
         [Fact]
         public void Delete_OneBook_BookDeleted()
         {
-            Book testBook1 = new Book("Britton");
+            Book testBook1 = new Book("Alice in Wonderland");
             testBook1.Save();
             Book testBook2 = new Book("Jungle Book");
             testBook2.Save();
@@ -103,6 +103,27 @@ namespace Library
             List<Book> expected = new List<Book>{testBook2};
 
             Assert.Equal(expected, allBooks);
+        }
+
+        [Fact]
+        public void AddAuthor_OneBook_BookAndAuthor()
+        {
+            Book testBook1 = new Book("Alice in Wonderland");
+            testBook1.Save();
+
+            Author testAuthor1 = new Author("example author1");
+            testAuthor1.Save();
+
+            Author testAuthor2 = new Author("example author2");
+            testAuthor2.Save();
+
+            testBook1.AddAuthor(testAuthor1.GetId());
+            testBook1.AddAuthor(testAuthor2.GetId());
+
+            List<Author> allAuthors = testBook1.GetAuthor();
+            List<Author> expected = new List<Author>{testAuthor1, testAuthor2};
+
+            Assert.Equal(expected, allAuthors);
         }
 
         public void Dispose()
