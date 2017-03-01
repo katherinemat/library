@@ -85,6 +85,22 @@ namespace Library
             DB.CloseSqlConnection(rdr, conn);
         }
 
+        public void Delete()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM book WHERE id = @BookId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@BookId", this.GetId()));
+
+            cmd.ExecuteNonQuery();
+
+            if (conn != null)
+            {
+                conn.Close();
+            }
+        }
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("book");

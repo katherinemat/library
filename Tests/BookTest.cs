@@ -40,6 +40,22 @@ namespace Library
             Assert.Equal(testId, result);
         }
 
+        [Fact]
+        public void Delete_OneBook_BookDeleted()
+        {
+            Book testBook1 = new Book("Britton");
+            testBook1.Save();
+            Book testBook2 = new Book("Jungle Book");
+            testBook2.Save();
+
+            testBook1.Delete();
+
+            List<Book> allBooks = Book.GetAll();
+            List<Book> expected = new List<Book>{testBook2};
+
+            Assert.Equal(expected, allBooks);
+        }
+
         public void Dispose()
         {
             Book.DeleteAll();
