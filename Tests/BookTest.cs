@@ -126,6 +126,27 @@ namespace Library
             Assert.Equal(expected, allAuthors);
         }
 
+        [Fact]
+        public void UpdateAuthor_OneBook_BookAndNewAuthor()
+        {
+            Book testBook1 = new Book("Alice in Wonderland");
+            testBook1.Save();
+
+            Author testAuthor1 = new Author("example author1");
+            testAuthor1.Save();
+
+            Author testAuthor2 = new Author("example author2");
+            testAuthor2.Save();
+
+            testBook1.AddAuthor(testAuthor1.GetId());
+            testBook1.UpdateAuthor(testAuthor1, testAuthor2);
+
+            List<Author> allAuthors = testBook1.GetAuthor();
+            List<Author> expected = new List<Author>{testAuthor2};
+
+            Assert.Equal(expected, allAuthors);
+        }
+
         public void Dispose()
         {
             Book.DeleteAll();

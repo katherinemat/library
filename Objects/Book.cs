@@ -216,6 +216,28 @@ namespace Library
             return allAuthors;
         }
 
+        public void UpdateAuthor(Author OldAuthor, Author newAuthor)
+        {
+            int OldAuthorId = OldAuthor.GetId();
+
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE books_authors SET author_id = @NewAuthorId WHERE author_id = @OldAuthorId AND book_id = @BookId;", conn);
+
+            SqlParameter bookParameter = new SqlParameter("@BookId", this.GetId());
+            SqlParameter oldAuthorParameter = new SqlParameter("@OldAuthorId", OldAuthorId);
+            SqlParameter newAuthorParameter = new SqlParameter("@NewAuthorId", newAuthor.GetId());
+            cmd.Parameters.Add(bookParameter);
+            cmd.Parameters.Add(oldAuthorParameter);
+            cmd.Parameters.Add(newAuthorParameter);
+
+            SqlDataReader rdr = null;
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(rdr, conn);
+        }
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("book");
