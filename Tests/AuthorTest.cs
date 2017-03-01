@@ -107,6 +107,9 @@ namespace Library
 
         public void Dispose()
         {
+            Copy.DeleteAll();
+            Patron.DeleteAll();
+            Book.DeleteAll();
             Author.DeleteAll();
         }
     }

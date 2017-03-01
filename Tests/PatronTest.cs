@@ -105,9 +105,29 @@ namespace Library
             Assert.Equal(expected, allPatrons);
         }
 
+        [Fact]
+        public void AddCopy_OneCopy_PatronAndNewCopy()
+        {
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+
+            Copy newCopy = new Copy(1, 15);
+            newCopy.Save();
+
+            testPatron.AddCopy(newCopy.GetId());
+
+            List<Copy> allCopies = testPatron.GetCopy();
+            List<Copy> expected = new List<Copy>{newCopy};
+
+            Assert.Equal(expected, allCopies);
+        }
+
         public void Dispose()
         {
+            Copy.DeleteAll();
             Patron.DeleteAll();
+            Book.DeleteAll();
+            Author.DeleteAll();
         }
     }
 }

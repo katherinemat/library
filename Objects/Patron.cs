@@ -177,12 +177,14 @@ namespace Library
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current, due_date) VALUES (@BookId, @CopyId, @Current, @DueDate); UPDATE copy SET available = @Available WHERE copy_id = @CopyId;", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current_checkout, due_date) VALUES (@PatronId, @CopyId, @CurrentCheckout, @DueDate); UPDATE copy SET available = @Available WHERE id = @CopyId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
             cmd.Parameters.Add(new SqlParameter("@CopyId", copyId.ToString()));
-            cmd.Parameters.Add(new SqlParameter("@Current", "1"));
+            cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
+            //Later on, lets figure out a way to get the current date to plug into duedate.
             cmd.Parameters.Add(new SqlParameter("@DueDate", "2016-03-01"));
+            cmd.Parameters.Add(new SqlParameter("@Available", "0"));
 
             cmd.ExecuteNonQuery();
 
@@ -197,7 +199,7 @@ namespace Library
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT copy.* FROM patron JOIN checkout ON (copy.id = checkout.copy_id) JOIN patron ON (checkout.patron_id = patron.id) WHERE patron.id = @PatronId;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT copy.* FROM patron JOIN checkout ON (patron.id = checkout.patron_id) JOIN copy ON (checkout.copy_id = copy.id) WHERE patron.id = @PatronId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
 
