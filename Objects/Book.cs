@@ -25,7 +25,7 @@ namespace Library
             {
                 Book newBook = (Book) otherBook;
                 bool idEquality = this.GetId() == newBook.GetId();
-                bool titleEquality = this.GetName() == newBook.GetName();
+                bool titleEquality = this.GetTitle() == newBook.GetTitle();
                 return (idEquality && titleEquality);
             }
         }
@@ -34,11 +34,11 @@ namespace Library
         {
             return _id;
         }
-        public void SetName(string newName)
+        public void SetTitle(string newTitle)
         {
-            _title = newName;
+            _title = newTitle;
         }
-        public string GetName()
+        public string GetTitle()
         {
             return _title;
         }
@@ -56,8 +56,8 @@ namespace Library
             while(rdr.Read())
             {
                 int bookId = rdr.GetInt32(0);
-                string bookName = rdr.GetString(1);
-                Book newBook = new Book(bookName, bookId);
+                string bookTitle = rdr.GetString(1);
+                Book newBook = new Book(bookTitle, bookId);
                 allBooks.Add(newBook);
             }
 
@@ -71,15 +71,86 @@ namespace Library
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO book (title) OUTPUT INSERTED.id VALUES (@Name);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO book (title) OUTPUT INSERTED.id VALUES (@Title);", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@Name", this.GetName()));
+            cmd.Parameters.Add(new SqlParameter("@Title", this.GetTitle()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
             while(rdr.Read())
             {
                 this._id = rdr.GetInt32(0);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+        }
+
+        public static Book Find(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM book WHERE id = @BookId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@BookId", id.ToString()));
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundBookId = 0;
+            string foundTitle = null;
+
+            while(rdr.Read())
+            {
+                foundBookId = rdr.GetInt32(0);
+                foundTitle = rdr.GetString(1);
+            }
+            Book foundBook = new Book(foundTitle, foundBookId);
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return foundBook;
+        }
+
+        public static Book Search(string title)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM book WHERE title = @BookTitle;", conn);
+            cmd.Parameters.Add(new SqlParameter("@BookTitle", title));
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundBookId = 0;
+            string foundTitle = null;
+
+            while(rdr.Read())
+            {
+                foundBookId = rdr.GetInt32(0);
+                foundTitle = rdr.GetString(1);
+            }
+            Book foundBook = new Book(foundTitle, foundBookId);
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return foundBook;
+        }
+
+        public void UpdateTitle(string newTitle)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE book SET title = @NewTitle OUTPUT INSERTED.title WHERE id=@BookId;", conn);
+
+            SqlParameter newTitleParameter = new SqlParameter("@NewTitle", newTitle);
+            cmd.Parameters.Add(newTitleParameter);
+
+            SqlParameter bookIdParameter = new SqlParameter("@BookId", this.GetId());
+            cmd.Parameters.Add(bookIdParameter);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+            {
+                this._title = rdr.GetString(0);
             }
 
             DB.CloseSqlConnection(rdr, conn);

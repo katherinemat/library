@@ -41,6 +41,55 @@ namespace Library
         }
 
         [Fact]
+        public void Test_Find_FindsBookInDatabase()
+        {
+            //Arrange
+            Book testBook1 = new Book("example book1");
+            testBook1.Save();
+
+            Book testBook2 = new Book("example book2");
+            testBook2.Save();
+
+            //Act
+            Book result = Book.Find(testBook2.GetId());
+
+            //Assert
+            Assert.Equal(testBook2, result);
+        }
+
+        [Fact]
+        public void Search_BookTitle_FoundBookInDatabase()
+        {
+            //Arrange
+            Book testBook1 = new Book("example book1");
+            testBook1.Save();
+
+            Book testBook2 = new Book("example book2");
+            testBook2.Save();
+
+            //Act
+            Book result = Book.Search(testBook2.GetTitle());
+
+            //Assert
+            Assert.Equal(testBook2, result);
+        }
+
+        [Fact]
+        public void UpdateTitle_OneBook_NewTitle()
+        {
+            Book book1 = new Book("Barcelona");
+            book1.Save();
+            Book book2 = new Book("Honolulu");
+            book2.Save();
+
+            book1.UpdateTitle("ex book");
+
+            string newTitle = book1.GetTitle();
+
+            Assert.Equal(newTitle, "ex book");
+        }
+
+        [Fact]
         public void Delete_OneBook_BookDeleted()
         {
             Book testBook1 = new Book("Britton");
