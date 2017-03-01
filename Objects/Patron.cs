@@ -172,7 +172,7 @@ namespace Library
             }
         }
 
-        public void AddCopy(int copyId)
+        public void AddCopy(Copy selectedCopy)
         {
             SqlConnection conn = DB.Connection();
             conn.Open();
@@ -180,7 +180,7 @@ namespace Library
             SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current_checkout, due_date) VALUES (@PatronId, @CopyId, @CurrentCheckout, @DueDate); UPDATE copy SET available = @Available WHERE id = @CopyId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
-            cmd.Parameters.Add(new SqlParameter("@CopyId", copyId.ToString()));
+            cmd.Parameters.Add(new SqlParameter("@CopyId", selectedCopy.GetId().ToString()));
             cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
             //Later on, lets figure out a way to get the current date to plug into duedate.
             cmd.Parameters.Add(new SqlParameter("@DueDate", "2016-03-01"));
@@ -192,6 +192,8 @@ namespace Library
             {
                 conn.Close();
             }
+
+            selectedCopy.SetAvailable(0);
         }
 
         public List<Copy> GetCopy()

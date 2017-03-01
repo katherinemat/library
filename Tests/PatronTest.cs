@@ -114,12 +114,31 @@ namespace Library
             Copy newCopy = new Copy(1, 15);
             newCopy.Save();
 
-            testPatron.AddCopy(newCopy.GetId());
+            testPatron.AddCopy(newCopy);
 
             List<Copy> allCopies = testPatron.GetCopy();
-            List<Copy> expected = new List<Copy>{newCopy};
+            int checkedOut = allCopies[0].GetBookId();
 
-            Assert.Equal(expected, allCopies);
+            int expected = newCopy.GetBookId();
+
+            Assert.Equal(expected, checkedOut);
+        }
+
+        [Fact]
+        public void AddCopy_OneCopy_CopyNotAvailable()
+        {
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+
+            Copy newCopy = new Copy(1, 15);
+            newCopy.Save();
+
+            testPatron.AddCopy(newCopy);
+            newCopy.Save();
+
+            int available = newCopy.GetAvailable();
+
+            Assert.Equal(0, available);
         }
 
         public void Dispose()
