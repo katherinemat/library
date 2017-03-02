@@ -101,10 +101,11 @@ namespace Library
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO copy (book_id, copy_number) OUTPUT INSERTED.id VALUES (@BookId, @CopyNumber);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO copy (book_id, copy_number, available) OUTPUT INSERTED.id VALUES (@BookId, @CopyNumber, @Available);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@BookId", this.GetBookId()));
             cmd.Parameters.Add(new SqlParameter("@CopyNumber", this.GetCopyNumber()));
+            cmd.Parameters.Add(new SqlParameter("@Available", "1"));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 

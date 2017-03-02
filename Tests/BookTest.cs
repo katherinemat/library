@@ -147,6 +147,29 @@ namespace Library
             Assert.Equal(expected, allAuthors);
         }
 
+        [Fact]
+        public void GetAvailableCopy_Book_BookAvailableCopies()
+        {
+            Book testBook1 = new Book("Alice in Wonderland");
+            testBook1.Save();
+
+            Copy newCopy1 = new Copy(testBook1.GetId(), 15);
+            newCopy1.Save();
+            Copy newCopy2 = new Copy(testBook1.GetId(), 12);
+            newCopy2.Save();
+
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+
+
+            List<Copy> availableCopies = testBook1.GetAvailableCopy();
+            // int result = availableCopies[0].GetBookId();
+            List<Copy> expectedList = new List<Copy>{newCopy1, newCopy2};
+            // int expected = expectedList[0].GetBookId();
+
+            Assert.Equal(expectedList, availableCopies);
+        }
+
         public void Dispose()
         {
             Copy.DeleteAll();

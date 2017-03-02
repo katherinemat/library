@@ -11,8 +11,8 @@
 - Update authors of books
 - Check out a book
 - Check in a book
-- As a user, view how many copies of a book are available
-- As a user, get history of checkouts
 - View current checkouts
+- As a user, get history of checkouts
+- As a user, view how many copies of a book are available
 - See when a book is due
 - View a list of overdue books
