@@ -174,26 +174,30 @@ namespace Library
 
         public void AddCopy(Copy selectedCopy)
         {
-            SqlConnection conn = DB.Connection();
-            conn.Open();
-
-            SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current_checkout, due_date) VALUES (@PatronId, @CopyId, @CurrentCheckout, @DueDate); UPDATE copy SET available = @Available WHERE id = @CopyId;", conn);
-
-            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
-            cmd.Parameters.Add(new SqlParameter("@CopyId", selectedCopy.GetId().ToString()));
-            cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
-            //TODO Later on, lets figure out a way to get the current date to plug into duedate.
-            cmd.Parameters.Add(new SqlParameter("@DueDate", "2017-03-02"));
-            cmd.Parameters.Add(new SqlParameter("@Available", "0"));
-
-            cmd.ExecuteNonQuery();
-
-            if(conn != null)
+            int isAvailable = selectedCopy.GetAvailable();
+            if (isAvailable == 1)
             {
-                conn.Close();
-            }
+                SqlConnection conn = DB.Connection();
+                conn.Open();
 
-            selectedCopy.SetAvailable(0);
+                SqlCommand cmd = new SqlCommand("INSERT INTO checkout (patron_id, copy_id, current_checkout, due_date) VALUES (@PatronId, @CopyId, @CurrentCheckout, @DueDate); UPDATE copy SET available = @Available WHERE id = @CopyId;", conn);
+
+                cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+                cmd.Parameters.Add(new SqlParameter("@CopyId", selectedCopy.GetId().ToString()));
+                cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
+                //TODO Later on, lets figure out a way to get the current date to plug into duedate.
+                cmd.Parameters.Add(new SqlParameter("@DueDate", "2017-03-02"));
+                cmd.Parameters.Add(new SqlParameter("@Available", "0"));
+
+                cmd.ExecuteNonQuery();
+
+                if(conn != null)
+                {
+                    conn.Close();
+                }
+
+                selectedCopy.SetAvailable(0);
+            }
         }
 
         public List<Copy> GetCopy()

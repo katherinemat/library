@@ -141,6 +141,28 @@ namespace Library
         }
 
         [Fact]
+        public void AddCopy_OneCopy_CopyNotAvailable2()
+        {
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+            Patron testPatron2 = new Patron("dkjhfksjdhf");
+            testPatron2.Save();
+
+            Book newBook = new Book("super book");
+
+            Copy newCopy = new Copy(newBook.GetId(), 1);
+            newCopy.Save();
+
+            testPatron.AddCopy(newCopy);
+            testPatron2.AddCopy(newCopy);
+
+            List<Copy> patroncopy = testPatron2.GetCopy();
+            List<Copy> expected = new List<Copy>{};
+
+            Assert.Equal(expected, patroncopy);
+        }
+
+        [Fact]
         public void CheckIn_OneCopy_PatronAndNewCopy()
         {
             Patron testPatron = new Patron("Britton");
