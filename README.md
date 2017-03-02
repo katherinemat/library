@@ -14,7 +14,7 @@
 - View current checkouts
 - As a user, get history of checkouts
 - As a user, view how many copies of a book are available
-
 - See when a book is due
-- make sure copy is available
 - View a list of overdue books
+
+- make sure copy is available

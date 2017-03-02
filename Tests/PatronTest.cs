@@ -189,7 +189,7 @@ namespace Library
 
             newPatron.AddCopy(newCopy);
 
-            List<string> expected = new List<string>{"the book", "2016-03-01"};
+            List<string> expected = new List<string>{"the book", "2017-03-02"};
             List<string> dueDates = newPatron.GetDueDate();
             Assert.Equal(expected, dueDates);
         }
@@ -213,8 +213,32 @@ namespace Library
             newPatron.AddCopy(newCopy1);
             newPatron.AddCopy(newCopy2);
 
-            List<string> expected = new List<string>{"the book", "2016-03-01", "the book2", "2016-03-01"};
+            List<string> expected = new List<string>{"the book", "2017-03-02", "the book2", "2017-03-02"};
             List<string> dueDates = newPatron.GetDueDate();
+            Assert.Equal(expected, dueDates);
+        }
+
+        [Fact]
+        public void GetOverdue_Patron_AllDatesAndBookTitles()
+        {
+            Patron newPatron = new Patron("Britton");
+            newPatron.Save();
+
+            Book newBook1 = new Book("the book");
+            newBook1.Save();
+            Book newBook2 = new Book("the book2");
+            newBook2.Save();
+
+            Copy newCopy1 = new Copy(newBook1.GetId(), 15);
+            newCopy1.Save();
+            Copy newCopy2 = new Copy(newBook2.GetId(), 15);
+            newCopy2.Save();
+
+            newPatron.AddCopy(newCopy1);
+            newPatron.AddCopy(newCopy2);
+
+            List<string> expected = new List<string>{};
+            List<string> dueDates = newPatron.GetOverdue();
             Assert.Equal(expected, dueDates);
         }
 
