@@ -72,6 +72,14 @@ namespace Library
             _available = newAvailable;
         }
 
+        public string GetBookTitle()
+        {
+            Book foundBook = Book.Find(_bookId);
+            string bookTitle = foundBook.GetTitle();
+            return bookTitle;
+            //thisCopy.GetBook().GetTitle();
+        }
+
         public static List<Copy> GetAll()
         {
             List<Copy> allCopys = new List<Copy>{};

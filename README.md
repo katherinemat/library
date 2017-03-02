@@ -16,4 +16,5 @@
 - As a user, view how many copies of a book are available
 
 - See when a book is due
+- make sure copy is available
 - View a list of overdue books

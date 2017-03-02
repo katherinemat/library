@@ -175,6 +175,25 @@ namespace Library
             Assert.Equal(1, available);
         }
 
+        [Fact]
+        public void GetDueDate_Patron_allDatesAndBookTitles()
+        {
+            Patron newPatron = new Patron("Britton");
+            newPatron.Save();
+
+            Book newBook = new Book("the book");
+            newBook.Save();
+
+            Copy newCopy = new Copy(newBook.GetId(), 15);
+            newCopy.Save();
+
+            newPatron.AddCopy(newCopy);
+
+            List<string> expected = new List<string>{"the book", "2016-03-01"};
+            List<string> dueDates = newPatron.GetDueDate();
+            Assert.Equal(expected, dueDates);
+        }
+
         public void Dispose()
         {
             Copy.DeleteAll();

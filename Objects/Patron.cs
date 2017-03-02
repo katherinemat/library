@@ -182,7 +182,7 @@ namespace Library
             cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
             cmd.Parameters.Add(new SqlParameter("@CopyId", selectedCopy.GetId().ToString()));
             cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
-            //Later on, lets figure out a way to get the current date to plug into duedate.
+            //TODO Later on, lets figure out a way to get the current date to plug into duedate.
             cmd.Parameters.Add(new SqlParameter("@DueDate", "2016-03-01"));
             cmd.Parameters.Add(new SqlParameter("@Available", "0"));
 
@@ -271,6 +271,34 @@ namespace Library
             }
 
             selectedCopy.SetAvailable(1);
+        }
+
+        public List<string> GetDueDate()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT copy_id, due_date FROM checkout WHERE patron_id = @PatronId AND current_checkout = 1;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<string> allDue = new List<string> {};
+
+            while(rdr.Read())
+            {
+                int copyId = rdr.GetInt32(0);
+                Copy foundCopy = Copy.Find(copyId);
+                string foundTitle = foundCopy.GetBookTitle();
+                allDue.Add(foundTitle);
+                string dueDate = rdr.GetDateTime(1).ToString("yyyy-MM-dd");
+                allDue.Add(dueDate);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return allDue;
         }
 
         public static void DeleteAll()
