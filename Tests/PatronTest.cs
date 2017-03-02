@@ -134,11 +134,45 @@ namespace Library
             newCopy.Save();
 
             testPatron.AddCopy(newCopy);
-            newCopy.Save();
 
             int available = newCopy.GetAvailable();
 
             Assert.Equal(0, available);
+        }
+
+        [Fact]
+        public void CheckIn_OneCopy_PatronAndNewCopy()
+        {
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+
+            Copy newCopy = new Copy(1, 15);
+            newCopy.Save();
+
+            testPatron.AddCopy(newCopy);
+            testPatron.CheckIn(newCopy);
+
+            List<Copy> allCopies = testPatron.GetCurrentCopy();
+            int checkedOut = allCopies.Count;
+
+            Assert.Equal(0, checkedOut);
+        }
+
+        [Fact]
+        public void CheckIn_OneCopy_CopyAvailable()
+        {
+            Patron testPatron = new Patron("Britton");
+            testPatron.Save();
+
+            Copy newCopy = new Copy(1, 15);
+            newCopy.Save();
+
+            testPatron.AddCopy(newCopy);
+            testPatron.CheckIn(newCopy);
+
+            int available = newCopy.GetAvailable();
+
+            Assert.Equal(1, available);
         }
 
         public void Dispose()

@@ -223,6 +223,56 @@ namespace Library
             return allCopys;
         }
 
+        public List<Copy> GetCurrentCopy()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT copy.* FROM patron JOIN checkout ON (patron.id = checkout.patron_id) JOIN copy ON (checkout.copy_id = copy.id) WHERE patron.id = @PatronId AND current_checkout = @CurrentCheckout;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+            cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "1"));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Copy> allCopys = new List<Copy> {};
+
+            while(rdr.Read())
+            {
+                int copyId = rdr.GetInt32(0);
+                int copyBookId = rdr.GetInt32(1);
+                int copyCopyNumber = rdr.GetInt32(2);
+                Copy newCopy = new Copy(copyBookId, copyCopyNumber, copyId);
+                allCopys.Add(newCopy);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return allCopys;
+        }
+
+        public void CheckIn(Copy selectedCopy)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE copy SET available = @Available WHERE id = @CopyId; UPDATE checkout SET current_checkout = @CurrentCheckout WHERE copy_id = @CopyId AND patron_id = @PatronId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@Available", "1"));
+            cmd.Parameters.Add(new SqlParameter("@CopyId", selectedCopy.GetId().ToString()));
+            cmd.Parameters.Add(new SqlParameter("@CurrentCheckout", "0"));
+            cmd.Parameters.Add(new SqlParameter("@PatronId", this.GetId().ToString()));
+
+            cmd.ExecuteNonQuery();
+
+            if(conn != null)
+            {
+                conn.Close();
+            }
+
+            selectedCopy.SetAvailable(1);
+        }
+
         public static void DeleteAll()
         {
             DB.TableDeleteAll("patron");
