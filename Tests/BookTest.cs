@@ -160,11 +160,11 @@ namespace Library
 
             Patron testPatron = new Patron("Britton");
             testPatron.Save();
-
+            testPatron.AddCopy(newCopy1);
 
             List<Copy> availableCopies = testBook1.GetAvailableCopy();
             // int result = availableCopies[0].GetBookId();
-            List<Copy> expectedList = new List<Copy>{newCopy1, newCopy2};
+            List<Copy> expectedList = new List<Copy>{newCopy2};
             // int expected = expectedList[0].GetBookId();
 
             Assert.Equal(expectedList, availableCopies);
