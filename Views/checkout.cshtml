@@ -1,0 +1,11 @@
+@{
+    Layout="Shared/_Layoutpatron.cshtml";
+}
+
+<h3>@Model.GetTitle()</h3>
+
+<div class="row">
+    <form class="col s12" id="sign-in" action="/success" method="post">
+        <button type="submit" class="btn btn-lg btn-info">Checkout</button>
+    </form>
+</div>

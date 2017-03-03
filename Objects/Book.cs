@@ -238,6 +238,34 @@ namespace Library
             DB.CloseSqlConnection(rdr, conn);
         }
 
+        public List<Copy> GetCopy()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM copy WHERE book_id = @BookId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@BookId", this.GetId().ToString()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            List<Copy> allCopies = new List<Copy> {};
+
+            while(rdr.Read())
+            {
+                int copyId = rdr.GetInt32(0);
+                int bookId = rdr.GetInt32(1);
+                int copyNumber = rdr.GetInt32(2);
+                int available = rdr.GetByte(3);
+                Copy newCopy = new Copy(bookId, copyNumber, copyId);
+                allCopies.Add(newCopy);
+            }
+
+            DB.CloseSqlConnection(rdr, conn);
+
+            return allCopies;
+        }
+
         public List<Copy> GetAvailableCopy()
         {
             SqlConnection conn = DB.Connection();

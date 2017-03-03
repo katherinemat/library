@@ -1,0 +1,34 @@
+@{
+    Layout="Shared/_Layoutadmin.cshtml";
+}
+
+<h1>Books</h1>
+
+<div class="row">
+    <form class="col s12" id="book" action="/admin/books" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="title" id="title">
+            <label for="title">Title of the new Book</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="author" id="author">
+            <label for="author">Author of the new Book</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="copy" id="copy">
+            <label for="copy">Number of Copys for the new Book</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Create the new Book</button>
+    </form>
+</div>
+
+<ul>
+    @foreach (var Book in @Model["Books"])
+    {
+        <li><a href="/admin/Books/@Book.GetId()">@Book.GetTitle()</a></li>
+    }
+</ul>

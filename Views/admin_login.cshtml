@@ -1,0 +1,48 @@
+@{
+    Layout="Shared/_Layoutadmin.cshtml";
+}
+
+<h2>Admin Sign In</h2>
+
+<div class="row">
+    <form class="col s12" id="sign-in" action="/admin/home" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-username" id="admin-username">
+            <label for "admin-username">Username</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-password" id="admin-password">
+            <label for "admin-password">Password</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>
+
+    <form class="col s12" id="new-patron" action="/admin/home" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-new-name" id="admin-new-name">
+            <label for "admin-new-name">Name</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-new-username" id="admin-new-username">
+            <label for "admin-new-username">Username</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-new-password" id="admin-new-password">
+            <label for "admin-new-password">Password</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="admin-code" id="admin-code">
+            <label for "admin-code">Admin Code</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>
+
+</div>

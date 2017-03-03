@@ -1,0 +1,32 @@
+@{
+    Layout="Shared/_Layoutadmin.cshtml";
+}
+
+<h1>@Model["Book"].GetTitle()</h1>
+
+<ul>
+    @foreach (var author in @Model["Authors"])
+    {
+        <li>@author.GetName()</li>
+    }
+</ul>
+
+<p>@Model["Copies"].Count Copies</p>
+
+<div class="row">
+    <form class="col s12" id="delete-book" action="/admin/book/@Model["Book"].GetId()" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-lg btn-info">Delete this Book</button>
+    </form>
+</div>
+
+<form action="/admin/book/@Model["Book"].GetId()" method="post" id="update-book">
+    <input type="hidden" name="_method" value="PATCH">
+
+    <div class="input-field col s12">
+        <input type="text" name="name" id="name">
+        <label for="name">New Name</label>
+    </div>
+
+    <button type="submit" class="btn btn-lg btn-info">Update This Book</button>
+</form>

@@ -1,0 +1,21 @@
+@{
+    Layout="Shared/_Layout.cshtml";
+}
+
+<h2>Welcome, @Model["patron"].GetName()</h2>
+
+<div class="row">
+    <form class="col s12" id="sign-in" action="/home" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="username" id="username">
+            <label for "username">Username</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="password" id="password">
+            <label for "password">Password</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>

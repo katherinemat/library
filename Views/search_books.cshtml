@@ -1,0 +1,26 @@
+@{
+    Layout="Shared/_Layoutpatron.cshtml";
+}
+
+<div class="row">
+    <form class="col s12" id="sign-in" action="/search/books" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="title" id="title">
+            <label for "title">Title</label>
+        </div>
+
+        @* <div class="input-field col s12">
+            <input type="text" name="author" id="author">
+            <label for "author">Author</label>
+        </div> *@
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>
+</div>
+<div class="row">
+    @if(Model != null)
+    {
+        <h3><a href="/checkout/@Model.GetId()">@Model.GetTitle()</h3>
+    }
+</div>

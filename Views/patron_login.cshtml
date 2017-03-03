@@ -1,0 +1,41 @@
+@{
+    Layout="Shared/_Layoutpatron.cshtml";
+}
+
+<div class="row">
+    <form class="col s12" id="sign-in" action="/home" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="username" id="username">
+            <label for "username">Username</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="password" id="password">
+            <label for "password">Password</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>
+
+    <form class="col s12" id="new-patron" action="/home" method="post">
+
+        <div class="input-field col s12">
+            <input type="text" name="new-name" id="new-name">
+            <label for "new-name">Name</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="new-username" id="new-username">
+            <label for "new-username">Username</label>
+        </div>
+
+        <div class="input-field col s12">
+            <input type="text" name="new-password" id="new-password">
+            <label for "new-password">Password</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+    </form>
+
+</div>
